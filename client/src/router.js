@@ -30,14 +30,14 @@ export default new Router({
       component: TournamentList,
     },
     {
-      path: 'tournament/:id/register',
-      name: 'register',
-      component: Register,
-    },
-    {
       path: '/tournament/create',
       name: 'TournamentCreation',
       component: TournamentCreation,
+    },
+    {
+      path: '/tournament/:url/register',
+      name: 'register',
+      component: Register,
     },
   ],
 });

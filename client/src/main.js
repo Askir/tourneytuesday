@@ -11,6 +11,12 @@ Vue.config.productionTip = false;
 Vue.use(Vuetify, {
   theme: {
     primary: colors.deepPurple.darken2,
+    secondary: colors.deepPurple.lighten1,
+    accent: '#82B1FF',
+    error: '#FF5252',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#FFC107',
   },
 });
 

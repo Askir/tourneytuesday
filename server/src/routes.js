@@ -7,7 +7,11 @@ module.exports = (app) => {
     });
   });
 
+  app.get('/tournament/:url', TournamentController.show);
+
+  app.post('/tournament/:url/user', TournamentController.addUser);
+
   app.get('/tournaments', TournamentController.index);
 
-  app.post('/tournament/create', TournamentController.create);
+  app.post('/tournaments', TournamentController.create);
 };

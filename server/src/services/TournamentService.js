@@ -11,4 +11,10 @@ module.exports = {
   //   name: 'Tuesday1',
   //   url: 'KESEKSEATASDA',
   // });
+  addParticipant(tournamentUrl, data) {
+    return Api().post(`tournaments/${tournamentUrl}/participants.json`, {
+      api_key: 'ZFZctWgjIXn6JhyUyzDy6XSnWoXlqxYh5LLgpaqm',
+      participant: data,
+    });
+  },
 };
