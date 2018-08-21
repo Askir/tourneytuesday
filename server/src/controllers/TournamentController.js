@@ -2,6 +2,16 @@ const TournamentService = require('../services/TournamentService');
 const { Tournament } = require('../models');
 
 module.exports = {
+  async index(req, res) {
+    console.log(req.query);
+    const tournaments = await Tournament.findAll({
+      offset: req.query.offset,
+      limit: req.query.limit,
+    });
+    res.send({
+      tournaments,
+    });
+  },
   async create(req, res) {
     TournamentService.create({
       name: req.body.name,

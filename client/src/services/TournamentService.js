@@ -15,4 +15,11 @@ export default {
   //  lolName: 'Askir',
   //  tournamentID: 1
   // }
+  list(data) {
+    return Api().get('tournaments', data);
+  },
+  // TournamentService.list({
+  //  offset: 1,
+  //  limit: 2,
+  // }
 };
