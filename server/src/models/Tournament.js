@@ -7,4 +7,8 @@ module.exports = (sequelize, DataTypes) => sequelize.define('Tournament', {
     type: DataTypes.STRING,
     unique: true,
   },
+  registration: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 });

@@ -5,6 +5,9 @@
       <v-toolbar-title>Lancemenots Tournament Tuesday</v-toolbar-title>
       <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
+      <v-btn
+        v-if="!$store.state.isUserLoggedIn"
+        to="/login" flat>Admin login</v-btn>
       <v-btn to="/tournaments" flat>All Tournaments</v-btn>
       <v-btn to="/about" flat>About</v-btn>
     </v-toolbar-items>

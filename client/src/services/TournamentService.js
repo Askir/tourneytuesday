@@ -28,4 +28,14 @@ export default {
   // TournamentService.addParticipant('Askir1231231',{
   //  lolname: 'Askir',
   // });
+  update(url, data) {
+    return Api().post(`/tournament/${url}`, data);
+  },
+  // TournamentService.update('lancetourney', {
+  //   registration: true,
+  //   name: 'cookies',
+  // });
+  show(url) {
+    return Api().get(`tournament/${url}`);
+  },
 };

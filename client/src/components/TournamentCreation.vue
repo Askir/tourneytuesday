@@ -16,7 +16,7 @@
                 v-model="url"
                 placeholder="tournament_tuesday_28">
               </v-text-field>
-              <v-layout row justify-end>
+              <v-layout justify-end>
                   <v-btn
                     class="primary white--text"
                     @click="create">

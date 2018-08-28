@@ -10,4 +10,7 @@ module.exports = {
       storage: './tournamenttuesday.sqlite',
     },
   },
+  authentication: {
+    jwtSecret: process.env.JWT_SECRET || 'secret',
+  },
 };

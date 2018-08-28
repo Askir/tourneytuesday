@@ -1,32 +1,32 @@
 <template>
   <v-container>
+    <v-layout column>
     <v-card>
     <v-card-title class="headline font-weight-regular deep-purple darken-2 white--text">
-      Register for {{this.tournament.name}}</v-card-title>
+      Admin login</v-card-title>
       <v-card-text>
         <v-container>
           <v-layout column>
             <v-text-field
               :rules="[rules.required]"
-              label="Summoner name"
-              v-model="lolname"
-              placeholder="Your Summonername">
+              label="Login"
+              v-model="login">
             </v-text-field>
-            <v-tooltip top>
-              <v-text-field
-                :rules="[rules.required]"
-                slot='activator'
-                label="Twitch name"
-                v-model="twitchname"
-                placeholder="Your name on Twitch.tv">
-              </v-text-field>
-              <span>We check if you actually follow lance with this.</span>
-            </v-tooltip>
+            <v-text-field
+              v-model="password"
+              :append-icon="show ? 'visibility_off' : 'visibility'"
+              :rules="[rules.required]"
+              :type="show ? 'text' : 'password'"
+              name="input-10-1"
+              label="Password"
+              counter
+              @click:append="show = !show">
+            </v-text-field>
             <v-layout justify-end>
               <v-btn
                 class="deep-purple darken-2 white--text"
-                @click="register">
-                Register for Tournament
+                @click="sendLogin">
+                Login
               </v-btn>
             </v-layout>
             <v-alert
@@ -49,19 +49,20 @@
         </v-container>
       </v-card-text>
     </v-card>
+    </v-layout>
   </v-container>
 </template>
 
 <script>
-import TournamentService from '@/services/TournamentService';
+import AuthenticationService from '@/services/AuthenticationService';
 
 export default {
-  name: 'TournamentCreation',
+  name: 'Login',
   data() {
     return {
-      tournament: null,
-      lolname: '',
-      twitchname: '',
+      login: '',
+      password: '',
+      show: false,
       message: null,
       errors: null,
       rules: {
@@ -78,22 +79,22 @@ export default {
     },
   },
   methods: {
-    async register() {
+    async sendLogin() {
       try {
-        console.log(this.lolname);
-        const response = await TournamentService.addParticipant(this.$route.params.url, { lolname: this.lolname, twitchname: this.twitchname });
+        const response = await AuthenticationService.login({
+          login: this.login,
+          password: this.password
+        });
         this.message = response.data.message;
+        this.$store.dispatch('setToken', response.data.token);
+        this.$store.dispatch('setUser', response.data.user)
         this.error = null;
+        this.$router.push('/tournaments');
       } catch (error) {
-        console.log(error);
         this.errors = error.response.data.errors;
         this.message = null;
       }
     },
-  },
-  async mounted() {
-    const response = await TournamentService.show(this.$route.params.url);
-    this.tournament = response.data.tournament;
   },
 };
 </script>

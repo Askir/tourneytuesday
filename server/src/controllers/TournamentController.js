@@ -1,5 +1,6 @@
 const TournamentService = require('../services/TournamentService');
-const { Tournament } = require('../models');
+const FollowerService = require('../services/FollowerService');
+const { Tournament, Participant } = require('../models');
 
 module.exports = {
   async show(req, res) {
@@ -18,16 +19,33 @@ module.exports = {
       tournaments,
     });
   },
+  async update(req, res) {
+    try {
+      const tournament = await Tournament.findOne({ where: { url: `https://challonge.com/${req.params.url}` } });
+      tournament.name = req.body.name;
+      tournament.registration = req.body.registration;
+      tournament.save();
+      return res.send({ tournament });
+    } catch (error) {
+      return res.status(400).send({
+        error: 'failed to update tournament',
+      });
+    }
+    // implement update tournament
+  },
+
   async create(req, res) {
     TournamentService.create({
       name: req.body.name,
-      url: req.body.name,
+      url: req.body.url,
+      admin_ids_csv: '2533124',
     })
       .then(async (response) => {
         console.log(response.data.tournament);
         const tournament = await Tournament.create({
           name: response.data.tournament.name,
           url: response.data.tournament.full_challonge_url,
+          registration: false,
         });
         res.send({
           message: `successfully created tourney ${tournament.name}`,
@@ -40,17 +58,74 @@ module.exports = {
       });
   },
   async addUser(req, res) {
-    // req.params.id
+    console.log(req.body);
+    // Check for following on twitch with req.body.twitchname
+    const checkTwitchname = await Participant.findOne(
+      { where: { twitchname: req.body.twitchname, tournament_url: req.params.url } },
+    );
+    if (checkTwitchname) {
+      return res.status(400).send({
+        errors: ['Somebody already registered with that twitch name'],
+      });
+    }
+
+    const tourney = await Tournament.findOne({ where: { url: `https://challonge.com/${req.params.url}` } });
+    if (!tourney.registration) {
+      return res.status(400).send({
+        errors: ['Registration for this tournament is not possible at the moment'],
+      });
+    }
+
+    const checkLolname = await Participant.findOne(
+      { where: { lolname: req.body.lolname, tournament_url: req.params.url } },
+    );
+    if (checkLolname) {
+      return res.status(400).send({
+        errors: ['Somebody already registered with that summoner name'],
+      });
+    }
     try {
-      const response = await TournamentService.addParticipant(req.params.url, {
+      await FollowerService.doesFollow(req.body.twitchname, 'lancemenot');
+    } catch (error) {
+      if (error.response.status === 404) {
+        console.log(error.response);
+        return res.status(400).send({
+          errors: ['Sorry you are not following Lancemenot yet. Only followers are allowed to participate'],
+        });
+      }
+      if (error.response.status !== 200) {
+        return res.status(400).send({
+          errors: [
+            'Something went wrong when checking if you follow Lancemenot',
+            'Try again or notify Askir if the error persists'],
+        });
+      }
+    }
+
+    try {
+      await TournamentService.addParticipant(req.params.url, {
         name: req.body.lolname,
       });
-      res.send({
-        message: `successfully added user ${response.data.participant.name}`,
-      });
     } catch (error) {
-      res.status(400).send({
+      return res.status(400).send({
         errors: error.response.data.errors,
+      });
+    }
+
+    try {
+      const participant = await Participant.create({
+        lolname: req.body.lolname,
+        twitchname: req.body.twitchname,
+        tournament_url: req.params.url,
+      });
+      return res.send({
+        message: `successfully added user ${participant.lolname}`,
+      });
+    } catch (databaseError) {
+      return res.status(400).send({
+        errors: [
+          'User was added to tournament but something else went wrong.',
+          'If you are nice you can make a screenshot and notify askir'],
       });
     }
   },
