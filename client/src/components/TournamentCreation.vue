@@ -60,10 +60,10 @@ export default {
     };
   },
   computed: {
-    display_error: function() {
+    display_error() {
       return !!this.errors;
     },
-    display_message: function() {
+    display_message() {
       return !!this.message;
     },
   },

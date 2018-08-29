@@ -35,7 +35,10 @@
                   </v-flex>
                 </v-layout>
               </v-list-tile>
-              <v-divider v-if="index + 1 < tournaments.length" :key="`divider-${index}`"></v-divider>
+              <v-divider
+               v-if="index + 1 < tournaments.length"
+               :key="`divider-${index}`">
+              </v-divider>
             </template>
       </v-list>
       <v-btn
@@ -57,17 +60,17 @@ export default {
     };
   },
   methods: {
-    updateTourney (tourney) {
+    updateTourney(tourney) {
       TournamentService.update(tourney.short_url, {
         registration: tourney.registration,
         name: tourney.name,
       });
-    }
+    },
   },
   async mounted() {
     const response = await TournamentService.list({
-      offset:0,
-      limit:10,
+      offset: 0,
+      limit: 10,
     });
     this.tournaments = response.data.tournaments;
     this.tournaments.forEach((tourney) => {

@@ -1,5 +1,5 @@
 <template>
-  <v-app>   
+  <v-app>
     <v-toolbar app>
       <v-toolbar-side-icon></v-toolbar-side-icon>
       <v-toolbar-title>Lancemenots Tournament Tuesday</v-toolbar-title>
