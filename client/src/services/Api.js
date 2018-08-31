@@ -2,7 +2,7 @@ import axios from 'axios';
 import store from '@/store';
 
 export default () => axios.create({
-  baseURL: 'http://api.askir.me:80/',
+  baseURL: 'https://api.askir.me/',
   headers: {
     Authorization: `Bearer ${store.state.token}`,
   },

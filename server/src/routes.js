@@ -15,7 +15,7 @@ module.exports = (app) => {
 
   app.get('/tournament/:url', TournamentController.show);
 
-  app.post('/tournament/:url/user', isAuthenticated, TournamentController.addUser);
+  app.post('/tournament/:url/user', TournamentController.addUser);
 
   app.post('/tournament/:url', isAuthenticated, TournamentController.update);
 
