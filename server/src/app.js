@@ -15,13 +15,16 @@ require('./routes')(app);
 
 sequelize.sync()
   .then(() => {
-    const admin = User.findOne({ where: { username: 'Lancemenot' } });
-    if (!admin) {
-      User.create({
-        username: 'Lancemenot',
-        password: 'LILorvyovZagNa6',
+    User.findOne({ where: { username: 'Lancemenot' } })
+      .then((admin) => {
+        if (!admin) {
+          User.create({
+            username: 'Lancemenot',
+            password: 'LILorvyovZagNa6',
+          });
+        }
       });
-    }
+
     app.listen(config.port);
     console.log(`Server started on Port ${config.port}`);
   });
