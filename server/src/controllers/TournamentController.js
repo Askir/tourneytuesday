@@ -38,7 +38,7 @@ module.exports = {
     TournamentService.create({
       name: req.body.name,
       url: req.body.url,
-      admin_ids_csv: '2533124',
+      admin_ids_csv: '2533124,2875561,2842096,2842154,2875563',
     })
       .then(async (response) => {
         console.log(response.data.tournament);
