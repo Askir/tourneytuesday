@@ -19,6 +19,12 @@ module.exports = {
       tournaments,
     });
   },
+  async participants(req, res) {
+    const participants = await Participant.findAll({ where: { tournament_url: req.params.url } });
+    res.send({
+      participants,
+    });
+  },
   async update(req, res) {
     try {
       const tournament = await Tournament.findOne({ where: { url: `https://challonge.com/${req.params.url}` } });

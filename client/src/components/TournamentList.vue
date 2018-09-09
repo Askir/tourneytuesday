@@ -57,6 +57,7 @@ export default {
   data() {
     return {
       tournaments: null,
+      api_url: process.env.VUE_APP_API_URL,
     };
   },
   methods: {
@@ -68,13 +69,15 @@ export default {
     },
   },
   async mounted() {
+    console.log(process.env.VUE_APP_API_URL);
     const response = await TournamentService.list({
       offset: 0,
       limit: 10,
     });
     this.tournaments = response.data.tournaments;
     this.tournaments.forEach((tourney) => {
-      tourney.short_url = tourney.url.replace(/.*?:\/\/.*?\//, '');
+      // eslint-disable-next-line
+      tourney.short_url = tourney.url.replace(/.*?:\/\/.*?\//, ''); 
     });
   },
 };

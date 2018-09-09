@@ -38,4 +38,7 @@ export default {
   show(url) {
     return Api().get(`tournament/${url}`);
   },
+  participants(url) {
+    return Api().get(`tournament/${url}/participants`);
+  },
 };
